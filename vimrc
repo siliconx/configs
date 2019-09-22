@@ -1,3 +1,4 @@
+" ==========Vundle settings
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -8,6 +9,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
+" 插件管理工具
 Plugin 'VundleVim/Vundle.vim'
 
 " The following are examples of different formats supported.
@@ -20,12 +22,13 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Raimondi/delimitMate'
 
 " The NERD Tree
+" 树形目录
 Plugin 'scrooloose/nerdtree'
 
 " Plugin 'Valloric/YouCompleteMe'
 
-Plugin 'Rip-Rip/clang_complete'
-let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-3.8.so.1'
+" Plugin 'Rip-Rip/clang_complete'
+" let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-3.8.so.1'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -42,10 +45,10 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" color scheme
+" ===========color scheme
 syntax enable
 syntax on
-colorscheme monokai
+" colorscheme monokai
 
 " smartindent
 set smartindent
@@ -53,7 +56,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" set title
+" ============set title
 autocmd BufNewFile *.cpp,*.[ch],*.java exec ":call SetTitle()"
 func SetTitle()
     call setline(1, "// @siliconx")
@@ -61,7 +64,7 @@ func SetTitle()
     " call append(line(".")+1, "");
 endfunc
 
-" key binding
+" ============key binding
 imap <Alt-h> <left>
 imap <Alt-j> <down>
 imap <Alt-k> <up>
@@ -130,7 +133,7 @@ func! CompileRunGcc()
 endfun
 
 
-"自动补全
+" ==========自动补全
 :inoremap ( ()<ESC>i
 :inoremap ) <c-r>=ClosePair(')')<CR>
 :inoremap { {<CR>}<ESC>O
