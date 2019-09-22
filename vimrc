@@ -1,4 +1,4 @@
-" ==========Vundle settings
+" ==========Vundle设置
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -8,8 +8,7 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
-" 插件管理工具
+" let Vundle manage Vundle, required. 插件管理工具
 Plugin 'VundleVim/Vundle.vim'
 
 " The following are examples of different formats supported.
@@ -21,7 +20,6 @@ Plugin 'VundleVim/Vundle.vim'
 " delimitMate (auto complete parenthesis/brackets, .etc)
 Plugin 'Raimondi/delimitMate'
 
-" The NERD Tree
 " 树形目录
 Plugin 'scrooloose/nerdtree'
 
@@ -45,18 +43,24 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" ===========color scheme
+" ===========颜色主题
 syntax enable
 syntax on
 " colorscheme monokai
 
-" smartindent
+" ===========智能缩进
 set smartindent
 set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" ============set title
+" ===========显示空白
+set listchars=tab:»■,trail:■
+set list
+set wildmenu
+set wildmode=longest:list,full
+
+" ===========自动填入代码基础信息
 autocmd BufNewFile *.cpp,*.[ch],*.java exec ":call SetTitle()"
 func SetTitle()
     call setline(1, "// @siliconx")
@@ -64,7 +68,7 @@ func SetTitle()
     " call append(line(".")+1, "");
 endfunc
 
-" ============key binding
+" ===========键位绑定
 imap <Alt-h> <left>
 imap <Alt-j> <down>
 imap <Alt-k> <up>
@@ -109,8 +113,20 @@ function! NERDTreeQuit()
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
 
+" ===========设置跳出自动补全的括号
+func SkipPair()
+    let c = getline('.')[col('.') - 1]
+    if c == ')' || c == ']' || c == '"' || c == "'" || c == '}' || c == ":"
+        return "\<ESC>la"
+    else
+        return "\t"
+    endif
+endfunc
 
-" ---------------------------------
+" 将tab键绑定为跳出括号
+inoremap <TAB> <c-r>=SkipPair()<CR>
+
+" ===========F5编译运行
 " F5 to compile and run Java, C, C++, Python, .etc
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
@@ -121,8 +137,8 @@ func! CompileRunGcc()
   elseif &filetype == 'cpp'
     exec "!g++ % -o %<"
     exec "! ./%<"
-  elseif &filetype == 'java' 
-    exec "!javac %" 
+  elseif &filetype == 'java'
+    exec "!javac %"
     exec "!java %<"
   elseif &filetype == 'sh'
     :!./%
@@ -132,8 +148,7 @@ func! CompileRunGcc()
   endif
 endfun
 
-
-" ==========自动补全
+" ===========自动补全括号
 :inoremap ( ()<ESC>i
 :inoremap ) <c-r>=ClosePair(')')<CR>
 :inoremap { {<CR>}<ESC>O
@@ -142,7 +157,8 @@ endfun
 :inoremap ] <c-r>=ClosePair(']')<CR>
 :inoremap " ""<ESC>i
 :inoremap ' ''<ESC>i
-function! ClosePair(char)
+
+func! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
     return "\<Right>"
   else
