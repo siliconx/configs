@@ -14,19 +14,15 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 
-" java complete
-" Plugin 'artur-shaik/vim-javacomplete2'
-
 " delimitMate (auto complete parenthesis/brackets, .etc)
 Plugin 'Raimondi/delimitMate'
 
 " 树形目录
 Plugin 'scrooloose/nerdtree'
+let NERDTreeWinSize=20
 
-" Plugin 'Valloric/YouCompleteMe'
-
-" Plugin 'Rip-Rip/clang_complete'
-" let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-3.8.so.1'
+" 自动补全
+Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -55,10 +51,8 @@ set shiftwidth=4
 set expandtab
 
 " ===========显示空白
-set listchars=tab:»■,trail:■
+set listchars=tab:>-,trail:-
 set list
-set wildmenu
-set wildmode=longest:list,full
 
 " ===========自动填入代码基础信息
 autocmd BufNewFile *.cpp,*.[ch],*.java exec ":call SetTitle()"
@@ -74,7 +68,7 @@ imap <Alt-j> <down>
 imap <Alt-k> <up>
 imap <Alt-l> <right>
 
-" TAB to jump out the parenthesis/brackets, etc
+" Shift+TAB to jump out the parenthesis/brackets, etc
 inoremap <Shift-Tab> <esc>la
 
 " make transparent background
@@ -83,48 +77,13 @@ hi Normal ctermbg=none
 " show line number
 set number
 
-" NERDTree config
+" ===========NERDTree config
 map <F2> :NERDTreeToggle<CR>
 autocmd vimenter * NERDTree  " auto launch NERDTree
 autocmd VimEnter * wincmd p  " fous on mian pane
 
 " auto close NERDTree when no active buffer exsit
-function! NERDTreeQuit()
-  redir => buffersoutput
-  silent buffers
-  redir END
-"                     1BufNo  2Mods.     3File           4LineNo
-  let pattern = '^\s*\(\d\+\)\(.....\) "\(.*\)"\s\+line \(\d\+\)$'
-  let windowfound = 0
-
-  for bline in split(buffersoutput, "\n")
-    let m = matchlist(bline, pattern)
-
-    if (len(m) > 0)
-      if (m[2] =~ '..a..')
-        let windowfound = 1
-      endif
-    endif
-  endfor
-
-  if (!windowfound)
-    quitall
-  endif
-endfunction
-autocmd WinEnter * call NERDTreeQuit()
-
-" ===========设置跳出自动补全的括号
-func SkipPair()
-    let c = getline('.')[col('.') - 1]
-    if c == ')' || c == ']' || c == '"' || c == "'" || c == '}' || c == ":"
-        return "\<ESC>la"
-    else
-        return "\t"
-    endif
-endfunc
-
-" 将tab键绑定为跳出括号
-inoremap <TAB> <c-r>=SkipPair()<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ===========F5编译运行
 " F5 to compile and run Java, C, C++, Python, .etc
@@ -148,20 +107,3 @@ func! CompileRunGcc()
   endif
 endfun
 
-" ===========自动补全括号
-:inoremap ( ()<ESC>i
-:inoremap ) <c-r>=ClosePair(')')<CR>
-:inoremap { {<CR>}<ESC>O
-:inoremap } <c-r>=ClosePair('}')<CR>
-:inoremap [ []<ESC>i
-:inoremap ] <c-r>=ClosePair(']')<CR>
-:inoremap " ""<ESC>i
-:inoremap ' ''<ESC>i
-
-func! ClosePair(char)
-  if getline('.')[col('.') - 1] == a:char
-    return "\<Right>"
-  else
-    return a:char
-  endif
-endfunction
