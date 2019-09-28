@@ -1,2 +1,2 @@
-# configs
-Config files
+# Vim, Sublime配置文件
+
