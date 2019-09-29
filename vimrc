@@ -68,25 +68,24 @@ func SetTitle()
 endfunc
 
 " ===========键位绑定===========
-" Shift+TAB to jump out the parenthesis/brackets, etc
+" 跳出括号，仅插入模式有效
 inoremap <Shift-Tab> <esc>la
 
-" ===========NERDTree config===========
-map <F2> :NERDTreeToggle<CR>
+" ===========NERDTree配置===========
+map <F2> :NERDTreeToggle<CR>  " F2打开或关闭目录
 autocmd vimenter * NERDTree  " auto launch NERDTree
 autocmd VimEnter * wincmd p  " fous on mian pane
-let NERDTreeWinSize=20
+let NERDTreeWinSize=20  " 宽度为20个字符
 
 " auto close NERDTree when no active buffer exsit
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ===========F5编译运行===========
-" F5 to compile and run Java, C, C++, Python, .etc
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
   exec "w"
   if &filetype == 'c'
-    exec "!g++ % -o %<"
+    exec "!gcc % -o %<"
     exec "! ./%<"
   elseif &filetype == 'cpp'
     exec "!g++ % -o %<"
@@ -94,11 +93,10 @@ func! CompileRunGcc()
   elseif &filetype == 'java'
     exec "!javac %"
     exec "!java %<"
+  elseif &filetype == 'python'
+    exec "!python %"
   elseif &filetype == 'sh'
     :!./%
-  elseif &filetype == 'py'
-    exec "!python3 %"
-    exec "!python3 %<"
   endif
 endfun
 
