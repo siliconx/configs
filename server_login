@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]
+then
+    echo "no argument"
+    exit 0
+fi
+
+if [ $1 == "1" ]
+then
+    # HIT
+    ssh siliconx@xxx -p xxx
+elif [ $1 == "2" ]
+then
+    # Bandwagon
+    ssh siliconx@xxx -p xxx
+else
+    # Ali
+    ssh siliconx@xxx -p xxx
+fi
+
