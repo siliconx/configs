@@ -15,7 +15,7 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 
-" delimitMate (auto complete parenthesis/brackets, .etc)
+" 括号补全
 Plugin 'Raimondi/delimitMate'
 
 " 树形目录
@@ -62,7 +62,7 @@ set list
 " ===========自动填入代码基础信息===========
 autocmd BufNewFile *.cpp,*.[ch],*.java exec ":call SetTitle()"
 func SetTitle()
-    call setline(1, "// @siliconx")
+    call setline(1, "// siliconx@163.com")
     call append(line("."), "// ".strftime("%Y-%m-%d %T"))
     " call append(line(".")+1, "");
 endfunc
@@ -81,8 +81,8 @@ let NERDTreeWinSize=20  " 宽度为20个字符
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ===========F5编译运行===========
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
+map <F5> :call CompileRun()<CR>
+func! CompileRun()
   exec "w"
   if &filetype == 'c'
     exec "!gcc % -o %<"
@@ -94,9 +94,11 @@ func! CompileRunGcc()
     exec "!javac %"
     exec "!java %<"
   elseif &filetype == 'python'
-    exec "!python %"
+    exec "!python3 %"
   elseif &filetype == 'sh'
     :!./%
+  elseif &filetype == 'dot'
+      exec "!dot % -Kfdp -T png -o %<"
   endif
 endfun
 
